@@ -35,10 +35,6 @@ class newUser{
         this.last = last;
         this.age = age;
     }
-
-    checkuserName(userID){}
-    checkFirstLast(firstlast){}
-    checkage(num){}
 }
 // ===============================================================//
 function checkUsername(name, array){
@@ -50,7 +46,7 @@ function checkUsername(name, array){
 
 
 function errorCheck (newUsers){
-    let accepted = [{username:"engeoh"}];
+    let accepted = [];
     let rejected = [];
     for (let user of newUsers){
         let status = true;
@@ -58,24 +54,41 @@ function errorCheck (newUsers){
         try{ //check existing username
             if (checkUsername(user.username,accepted) == true){
                 status = false;
-                rejected.push(user);
-                throw new Error (`Username: '${user.username}' already exists`)
+                throw new Error (`Username: (${user.username}) already exists`)
             }
             }catch(error){
                 console.log(error.message);
             }
         //checkusername format
         try{
-            
+            if (/\W+/.test(user.username) == true){
+                status = false;
+                throw new Error (`Username: (${user.username}) cannot contain spaces or special characters`);
+            }
+        }catch(error){
+                console.log(error.message);
         }
-        catch(error){
-                
+        //check first/last name
+        try{
+            if (/\W+/.test(user.first) || /\W+/.test(user.last)){
+                status = false;
+                throw new Error (`Username: (${user.username}) first/last name cannot contain spaces or special characters`);
+            }
+        }catch(error){
+                console.log(error.message);
         }
-            //check first/last name
-
-                //check age > 21
+        //check age > 21
+        try{
+        if (user.age < 21){
+            status = false;
+            throw new Error (`Username: (${user.username}) must be 21 years old`);
+        }
+    }catch(error){
+            console.log(error.message);
+    }
 
         if (status == true) accepted.push(user);
+        else rejected.push(user);
 
     }
      
@@ -83,11 +96,12 @@ function errorCheck (newUsers){
 
 }
 //==================================================================//
+
 let newUserArr = [];
 let acceptedUsers = []
 let unAcceptedUsers = [];
 
-newUserArr.push(new newUser("engeoh", "Alvin", "Ngo", 23));
+newUserArr.push(new newUser("engeoh !", "Alvin", "Ngo", 23));
 newUserArr.push(new newUser("engeoh2", "Bert", "Lee", 23));
 newUserArr.push(new newUser("engeoh", "Nall", "Singh", 23));
 
